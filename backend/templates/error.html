@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JobFIT Error</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Error</h2>
+        <p>{{ error }}</p>
+        <a href="{{ url_for('cv.chat') }}">Try again</a>
+    </div>
+</body>
+</html>

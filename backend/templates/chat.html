@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JobFIT Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>JobFIT Chatbot</h2>
+        <form method="POST" enctype="multipart/form-data">
+            <label>Upload CV (PDF/Image/DOCX):</label><br>
+            <input type="file" name="cv" accept=".pdf,.png,.jpg,.docx" required><br><br>
+            <label>Job Description (JD):</label><br>
+            <textarea name="jd" rows="5" cols="50" required></textarea><br><br>
+            <label>Question:</label><br>
+            <input type="text" name="question" required><br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
