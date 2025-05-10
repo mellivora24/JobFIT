@@ -2,6 +2,10 @@ from flask import Flask
 from api.cv_routes import cv_bp
 import os
 from dotenv import load_dotenv
+from utils.logger import setup_logger
+
+# Initialize logger
+logger = setup_logger()
 
 load_dotenv()
 app = Flask(__name__)
@@ -10,7 +14,14 @@ app.register_blueprint(cv_bp)
 
 @app.route('/')
 def index():
+    logger.info("Accessing root endpoint")
     return "JobFIT API"
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    logger.info("Starting Flask server")
+    try:
+        # init_db()
+        app.run(host='0.0.0.0', port=5000, debug=True)
+    except Exception as e:
+        logger.error(f"Failed to start Flask server: {str(e)}")
+        raise

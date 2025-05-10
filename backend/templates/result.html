@@ -7,7 +7,7 @@
 <body>
     <div class="container">
         <h2>Kết quả từ JobFIT Chatbot</h2>
-        <p><strong>Phản hồi:</strong> {{ response }}</p>
+        <p><strong>Phản hồi:</strong> {{ response|safe }}</p>
         <a href="{{ url_for('cv.chat') }}">Hỏi lại</a>
     </div>
 </body>
