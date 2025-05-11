@@ -58,7 +58,7 @@ class _WorkExperience(BaseModel):
 class _PersonalProject(BaseModel):
     """
     Thông tin dự án cá nhân của người dùng.
-    Khi người dùng đã đề cập đến dự án cá nhân thì phải đầy đủ thông tin về dự án.
+    Khi người dùng đã đề cập đến dự án cá nhân thì phải cung cấp tên dự án.
     """
     name: str = Field(..., description="Tên dự án")
     description: Optional[str] = Field(None, description="Mô tả dự án")
