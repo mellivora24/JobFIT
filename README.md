@@ -85,7 +85,6 @@ cd JobFIT
   ```bash
   python -m venv venv
   .\venv\Scripts\activate  # Windows
-  source venv/bin/activate  # Linux/Mac
   ```
 - **Cài đặt dependencies**:
   ```bash
@@ -93,9 +92,6 @@ cd JobFIT
   ```
 
 ### 3. Cấu hình
-- Copy file `.env.example` thành `.env`:
-  ```bash
-  copy .env.example .env
   ```
 - Cập nhật `.env` với các giá trị:
   ```env
@@ -109,13 +105,6 @@ cd JobFIT
 ```bash
 python backend/main.py
 ```
-- Truy cập: `http://localhost:5000`
-
-### 5. Triển khai với Docker
-- Build và chạy:
-  ```bash
-  docker-compose up --build
-  ```
 - Truy cập: `http://localhost:5000`
 
 ---
