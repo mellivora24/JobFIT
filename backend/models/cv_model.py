@@ -37,6 +37,7 @@ class _Certification(BaseModel):
     """
     name: str = Field(..., description="Tên chứng chỉ")
     issuing_organization: str = Field(..., description="Tổ chức cấp chứng chỉ")
+    certificate_link: Optional[str] = Field(None, description="Liên kết đến chứng chỉ")
 
 
 class _Skill(BaseModel):
@@ -53,6 +54,16 @@ class _WorkExperience(BaseModel):
     position: str = Field(..., description="Vị trí")
     time: Optional[str] = Field(..., description="Thời gian (ví dụ: 2020-2023)")
     description: Optional[str] = Field(None, description="Mô tả công việc")
+
+class _PersonalProject(BaseModel):
+    """
+    Thông tin dự án cá nhân của người dùng.
+    """
+    name: str = Field(..., description="Tên dự án")
+    description: Optional[str] = Field(None, description="Mô tả dự án")
+    members: Optional[List[int]] = Field(default_factory=list, description="Sô lượng thành viên tham gia dự án")
+    technologies: List[str] = Field(default_factory=list, description="Công nghệ sử dụng trong dự án")
+    github_link: Optional[str] = Field(None, description="Liên kết đến GitHub hoặc trang dự án")
 
 class CV(BaseModel):
     """
