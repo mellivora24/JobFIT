@@ -85,7 +85,6 @@ cd JobFIT
   ```bash
   python -m venv venv
   .\venv\Scripts\activate  # Windows
-  source venv/bin/activate  # Linux/Mac
   ```
 - **Cài đặt dependencies**:
   ```bash
