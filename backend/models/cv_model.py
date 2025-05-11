@@ -52,7 +52,7 @@ class _WorkExperience(BaseModel):
     """
     company: str = Field(..., description="Công ty")
     position: str = Field(..., description="Vị trí")
-    time: Optional[str] = Field(..., description="Thời gian (ví dụ: 2020-2023)")
+    time: Optional[str] = Field(..., description="Thời gian làm việc")
     description: Optional[str] = Field(None, description="Mô tả công việc")
 
 class _PersonalProject(BaseModel):
