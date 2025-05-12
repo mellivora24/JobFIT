@@ -1,88 +1,133 @@
 import openai
-from google import genai
-import os
-from dotenv import load_dotenv
-from services.similarity_service import calculate_similarity
-from services.cv_service import create_cv_embedding
-from services.jd_service import create_jd_embedding
-from utils.logger import setup_logger
+import json
+from backend.config.settings import Settings
+from backend.models.cv_model import CV
+from backend.models.jd_model import JD
+from backend.services.cv_service import create_cv_embedding
+from backend.services.jd_service import create_jd_embedding
+from backend.services.similarity_service import calculate_similarity
 
-# Initialize logger
-logger = setup_logger()
+# Configure the OpenAI API key
+openai.api_key = Settings.OPENAI_API_KEY
 
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def openai_chat_completion(prompt: str, model_name: str = "gpt-4", max_tokens: int = 500) -> str:
+def _create_json_cv(cv: CV):
     """
-    Generates a chat completion using OpenAI's model.\n
-    :param prompt: The prompt to send to the model.
-    :param model_name: The name of the model to use (default is "gpt-4").
-    :param max_tokens: The maximum number of tokens to generate (default is 500).
-    :return: The response from the model.
+    Convert CV object to JSON string
     """
-    response = openai.ChatCompletion.create(
-        model=model_name,
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=max_tokens,
+    return cv.model_dump_json()
+
+
+def _create_json_jd(jd: JD):
+    """
+    Convert JD object to JSON string
+    """
+    return jd.model_dump_json()
+
+
+def _extract_text_from_cv(cv_json: str):
+    """
+    Extract relevant text fields from CV JSON for embedding
+    """
+    cv_data = json.loads(cv_json)
+    texts = []
+
+    # Extract personal info
+    personal_info = cv_data.get("personal_info", {})
+    personal_text = f"{personal_info.get('name', '')} {personal_info.get('career_objective', '')}"
+    texts.append(personal_text.strip())
+
+    # Extract education
+    education_texts = []
+    for edu in cv_data.get("education", []):
+        edu_text = f"{edu.get('university', '')} {edu.get('major', '')} {edu.get('degree', '')}"
+        education_texts.append(edu_text.strip())
+    texts.append(" ".join(education_texts))
+
+    # Extract skills
+    skills_text = " ".join(cv_data.get("skills", []))
+    texts.append(skills_text)
+
+    # Extract work experience
+    work_exp_texts = []
+    for exp in cv_data.get("work_experience", []):
+        exp_text = f"{exp.get('position', '')} at {exp.get('company', '')} {exp.get('description', '')}"
+        work_exp_texts.append(exp_text.strip())
+    texts.append(" ".join(work_exp_texts))
+
+    return texts
+
+
+def _extract_text_from_jd(jd_json: str):
+    """
+    Extract relevant text fields from JD JSON for embedding
+    """
+    jd_data = json.loads(jd_json)
+    texts = []
+
+    # Extract job description
+    job_desc = jd_data.get("job_description", {})
+    desc_text = f"{job_desc.get('title', '')} {job_desc.get('description', '')}"
+    texts.append(desc_text.strip())
+
+    # Extract job requirements
+    job_req = jd_data.get("job_requirement", {})
+    req_text = f"{job_req.get('knowledge', '')} {job_req.get('experience', '')} {job_req.get('other_requirements', '')}"
+    texts.append(req_text.strip())
+
+    # Extract required skills
+    skills = job_req.get("skills", [])
+    if skills:
+        skills_text = " ".join(skills)
+        texts.append(skills_text)
+
+    return texts
+
+
+def _get_suggestions_from_openai(cv_json, jd_json):
+    """
+    Get suggestions for CV improvement based on JD using OpenAI
+    """
+    response = openai_client.chat.completions.create(
+        model="gpt-4.0",
+        messages=[
+            {
+                "role": "user",
+                "content": f"Hãy đề xuất cải tiến CV dựa vào JD sau, những trường không có nội dung được hiểu là thiếu:\nCV: {cv_json}\nJD: {jd_json}"
+            }
+        ]
     )
     return response.choices[0].message.content
 
-def gemini_chat_completion(prompt: str, model_name: str = "gemini-2.0-flash") -> str:
+
+def _get_matching_score(cv_json, jd_json):
     """
-    Generates a chat completion using Google's Gemini model.\n
-    :param prompt: The prompt to send to the model.
-    :param model_name: The name of the model to use (default is "gemini-2.0-flash").
-    :return: The response from the model.
+    Calculate matching score between CV and JD
     """
-    client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-    response = client.models.generate_content(
-        model=model_name,
-        contents=prompt,
-    )
-    return response.text
+    cv_text = _extract_text_from_cv(cv_json)
+    jd_text = _extract_text_from_jd(jd_json)
 
-def answer_question(question: str, cv_text: str, jd_text: str, chat_model: str = "gemini-2.0-flash") -> str:
+    cv_embedding = create_cv_embedding(cv_text)
+    jd_embedding = create_jd_embedding(jd_text)
+
+    similarity_score = calculate_similarity(cv_embedding, jd_embedding)
+    return similarity_score
+
+
+def review_cv(cv: CV, jd: JD):
     """
-    Answers a question based on the CV and JD text using OpenAI's model.\n
-    :param question: The question to answer.
-    :param cv_text: The CV text to use for context.
-    :param jd_text: The JD text to use for context.
-    :param chat_model: The name of the model to use (default is "gemini-2.0-flash")
-    :return: The answer to the question.
+    Review CV based on JD
+    :param cv: CV object
+    :param jd: JD object
+    :return: suggestions and matching score
     """
-    try:
-        logger.info(f"Processing question: {question}")
-        cv_embedding = create_cv_embedding(cv_text)
-        logger.debug("Created CV embedding")
+    cv_json = _create_json_cv(cv)
+    jd_json = _create_json_jd(jd)
 
-        jd_embedding = create_jd_embedding(jd_text)
-        logger.debug("Created JD embedding")
+    suggestions = _get_suggestions_from_openai(cv_json, jd_json)
+    matching_score = _get_matching_score(cv_json, jd_json)
 
-        match_score = calculate_similarity(cv_embedding, jd_embedding)
-        logger.info(f"Calculated Match Score: {match_score:.2f}%")
-
-        prompt = (
-            f"Question: {question}\n"
-            f"CV: {cv_text}\n"
-            f"JD: {jd_text}\n"
-            f"Match Score: {match_score:.2f}%\n"
-            "Answer in Vietnamese with suggestions."
-        )
-        logger.debug(f"Prompt: {prompt[:100]}...")  # Log first 100 chars
-
-        if chat_model == "gpt-4":
-            logger.info("Using OpenAI GPT-4 model")
-            response = openai_chat_completion(prompt, model_name="gpt-4", max_tokens=500)
-            logger.debug(f"OpenAI response: {response[:100]}...")  # Log first 100 chars
-        elif "gemini" in chat_model:
-            logger.info("Using Google Gemini model")
-            response = gemini_chat_completion(prompt, model_name=chat_model)
-            logger.debug(f"Gemini response: {response[:100]}...")
-        else:
-            logger.error(f"Invalid chat model specified: {chat_model}")
-            raise ValueError("Invalid chat model specified. Use 'gpt-4' or 'gemini'.")
-        return response
-    except Exception as e:
-        logger.error(f"Error in chatbot processing: {str(e)}")
-        raise
+    return {
+        "suggestions": suggestions,
+        "matching_score": matching_score
+    }

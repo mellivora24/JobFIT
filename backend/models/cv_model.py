@@ -35,8 +35,8 @@ class _Certification(BaseModel):
     Thông tin chứng chỉ của người dùng.
     Khi người dùng đã đề cập đến chứng chỉ thì phải đầy đủ thông tin về chứng chỉ.
     """
-    name: str = Field(..., description="Tên chứng chỉ")
-    issuing_organization: str = Field(..., description="Tổ chức cấp chứng chỉ")
+    name: Optional[str] = Field(..., description="Tên chứng chỉ")
+    issuing_organization: Optional[str] = Field(..., description="Tổ chức cấp chứng chỉ")
     certificate_link: Optional[str] = Field(None, description="Liên kết đến chứng chỉ")
 
 
@@ -44,14 +44,14 @@ class _Skill(BaseModel):
     """
     Thông tin kỹ năng của người dùng.
     """
-    name: str = Field(..., description="Tên kỹ năng")
+    name: Optional[str] = Field(..., description="Tên kỹ năng")
 
 class _WorkExperience(BaseModel):
     """
     Thông tin kinh nghiệm làm việc, người dùng cần cung cấp ít nhất thông tin về công ty, vị trí làm việc còn lại có thể bỏ qua.
     """
-    company: str = Field(..., description="Công ty")
-    position: str = Field(..., description="Vị trí")
+    company: Optional[str] = Field(..., description="Công ty")
+    position: Optional[str] = Field(..., description="Vị trí")
     time: Optional[str] = Field(..., description="Thời gian làm việc")
     description: Optional[str] = Field(None, description="Mô tả công việc")
 
@@ -59,19 +59,19 @@ class _PersonalProject(BaseModel):
     """
     Thông tin dự án cá nhân của người dùng.
     """
-    name: str = Field(..., description="Tên dự án")
+    name: Optional[str] = Field(..., description="Tên dự án")
     description: Optional[str] = Field(None, description="Mô tả dự án")
     members: Optional[List[int]] = Field(default_factory=list, description="Sô lượng thành viên tham gia dự án")
-    technologies: List[str] = Field(default_factory=list, description="Công nghệ sử dụng trong dự án")
+    technologies: Optional[List[str]]= Field(default_factory=list, description="Công nghệ sử dụng trong dự án")
     github_link: Optional[str] = Field(None, description="Liên kết đến GitHub hoặc trang dự án")
 
 class CV(BaseModel):
     """
     Mô hình dữ liệu cho CV (Curriculum Vitae) của người dùng.
     """
-    personal_info: _PersonalInfo = Field(..., description="Thông tin cá nhân")
+    personal_info: Optional[_PersonalInfo] = Field(..., description="Thông tin cá nhân")
     career_objective: Optional[str] = Field(None, description="Mục tiêu nghề nghiệp")
     education: Optional[List[_Education]] = Field(default_factory=list, description="Học vấn")
     certifications: Optional[List[_Certification]] = Field(default_factory=list, description="Chứng chỉ")
-    skills: List[str] = Field(default_factory=list, description="Kỹ năng")
-    work_experience: List[_WorkExperience] = Field(default_factory=list, description="Kinh nghiệm làm việc")
+    skills: Optional[List[str]] = Field(default_factory=list, description="Kỹ năng")
+    work_experience: Optional[List[_WorkExperience]]= Field(default_factory=list, description="Kinh nghiệm làm việc")

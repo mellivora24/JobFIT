@@ -1,11 +1,21 @@
-from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+from backend.utils.file_utils import extract_text_from_file
+from backend.utils.embedded_vector import embedded_vector
+
 def create_cv_embedding(cv_text):
     """
     Creates an embedding for the CV file using a pre-trained model.
-    :param cv_text:
+    :param cv_text: The CV text to create an embedding for.
     :return: The embedding of the CV file.
     """
-    return model.encode(cv_text)
 
+    cv_content = extract_text_from_file(cv_text)
+
+    embedded_cv = []
+    for content in cv_content:
+        if content is not None:
+            embedded_cv.append(embedded_vector(content))
+        else:
+            embedded_cv.append(None)
+
+    return embedded_cv

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from api.cv_routes import cv_bp
 import os
 from dotenv import load_dotenv
@@ -15,7 +15,7 @@ app.register_blueprint(cv_bp)
 @app.route('/')
 def index():
     logger.info("Accessing root endpoint")
-    return "JobFIT API"
+    return render_template('home.html')
 
 if __name__ == '__main__':
     logger.info("Starting Flask server")

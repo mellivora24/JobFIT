@@ -1,1 +1,695 @@
- 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobFIT - Nền tảng tìm kiếm việc làm hàng đầu</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #00a86b;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --white: #fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+        
+        .hero {
+            padding: 9rem 5% 5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            width: 50%;
+        }
+        
+        .hero-image {
+            width: 50%;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        
+        .search-box {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-input {
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .features {
+            padding: 5rem 5%;
+            background-color: var(--white);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .popular-jobs {
+            padding: 5rem 5%;
+            background-color: var(--light-gray);
+        }
+        
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .job-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .job-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .company-name {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .job-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .job-tag {
+            background-color: #f0f0f0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .testimonials {
+            padding: 5rem 5%;
+            background-color: var(--white);
+            text-align: center;
+        }
+        
+        .testimonial-cards {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            overflow-x: auto;
+            padding-bottom: 2rem;
+        }
+        
+        .testimonial-card {
+            min-width: 300px;
+            background-color: var(--light-gray);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: left;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+        
+        .author-info h4 {
+            margin-bottom: 0.3rem;
+        }
+        
+        .author-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .cta {
+            padding: 5rem 5%;
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn-cta {
+            background-color: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            display: inline-block;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-cta:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-3px);
+        }
+        
+        footer {
+            background-color: #1f2937;
+            color: #f5f5f5;
+            padding: 4rem 5% 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: var(--white);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #374151;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-content, .hero-image {
+                width: 100%;
+            }
+            
+            .hero-image {
+                margin-top: 3rem;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            
+            .auth-buttons {
+                margin-top: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">Job<span>FIT</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#">Trang chủ</a></li>
+                    <li><a href="#">Tìm việc làm</a></li>
+                    <li><a href="#">Công ty</a></li>
+                    <li><a href="#">Lương thưởng</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button class="btn btn-outline">Đăng nhập</button>
+                <button class="btn btn-primary">Đăng ký</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Tìm công việc phù hợp với kỹ năng của bạn</h1>
+            <p>JobFIT kết nối bạn với hàng nghìn cơ hội việc làm phù hợp với kỹ năng, kinh nghiệm và mong muốn của bạn.</p>
+            
+            <div class="search-box">
+                <form class="search-form">
+                    <input type="text" class="search-input" placeholder="Chức danh, kỹ năng hoặc công ty">
+                    <input type="text" class="search-input" placeholder="Địa điểm">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </form>
+            </div>
+            
+            <div class="stats">
+                <div>Hơn 10,000+ công việc đang chờ bạn khám phá</div>
+            </div>
+        </div>
+        
+        <div class="hero-image">
+            <img src="/api/placeholder/500/400" alt="JobFIT Hero Image">
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="section-title">
+            <h2>Tại sao chọn JobFIT?</h2>
+            <p>Chúng tôi giúp bạn tìm được công việc phù hợp nhất với khả năng và mong muốn của bạn</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Công việc phù hợp</h3>
+                <p>Thuật toán AI của chúng tôi phân tích kỹ năng và kinh nghiệm của bạn để gợi ý những công việc phù hợp nhất.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>So sánh lương thưởng</h3>
+                <p>Dữ liệu lương thưởng theo thời gian thực giúp bạn đánh giá mức đãi ngộ của công việc.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3>Đánh giá công ty</h3>
+                <p>Tìm hiểu văn hóa doanh nghiệp và môi trường làm việc thông qua đánh giá từ nhân viên.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-jobs">
+        <div class="section-title">
+            <h2>Việc làm phổ biến</h2>
+            <p>Khám phá những cơ hội việc làm mới nhất từ các công ty hàng đầu</p>
+        </div>
+        
+        <div class="jobs-grid">
+            <div class="job-card">
+                <div class="company-logo">FPT</div>
+                <h3 class="job-title">Lập trình viên Front-end</h3>
+                <div class="company-name">FPT Software</div>
+                <div class="job-details">
+                    <span>Hà Nội</span>
+                    <span>15-25 triệu</span>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">ReactJS</span>
+                    <span class="job-tag">JavaScript</span>
+                    <span class="job-tag">HTML/CSS</span>
+                </div>
+                <button class="btn btn-outline">Chi tiết</button>
+            </div>
+            
+            <div class="job-card">
+                <div class="company-logo">VNG</div>
+                <h3 class="job-title">Data Engineer</h3>
+                <div class="company-name">VNG Corporation</div>
+                <div class="job-details">
+                    <span>TP. HCM</span>
+                    <span>30-45 triệu</span>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">Python</span>
+                    <span class="job-tag">SQL</span>
+                    <span class="job-tag">AWS</span>
+                </div>
+                <button class="btn btn-outline">Chi tiết</button>
+            </div>
+            
+            <div class="job-card">
+                <div class="company-logo">TMA</div>
+                <h3 class="job-title">iOS Developer</h3>
+                <div class="company-name">TMA Solutions</div>
+                <div class="job-details">
+                    <span>Đà Nẵng</span>
+                    <span>20-30 triệu</span>
+                </div>
+                <div class="job-tags">
+                    <span class="job-tag">Swift</span>
+                    <span class="job-tag">Objective-C</span>
+                    <span class="job-tag">iOS</span>
+                </div>
+                <button class="btn btn-outline">Chi tiết</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-title">
+            <h2>Câu chuyện thành công</h2>
+            <p>Hàng nghìn người đã tìm được công việc phù hợp thông qua JobFIT</p>
+        </div>
+        
+        <div class="testimonial-cards">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Tôi đã tìm được công việc mơ ước chỉ sau 2 tuần sử dụng JobFIT. Thuật toán gợi ý việc làm chính xác đến bất ngờ!"</p>
+                <div class="testimonial-author">
+                    <div class="author-img"></div>
+                    <div class="author-info">
+                        <h4>Nguyễn Văn A</h4>
+                        <p>Frontend Developer tại FPT Software</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">"JobFIT giúp tôi chuyển đổi ngành nghề một cách dễ dàng. Tôi đánh giá cao thông tin lương thưởng minh bạch và chi tiết."</p>
+                <div class="testimonial-author">
+                    <div class="author-img"></div>
+                    <div class="author-info">
+                        <h4>Trần Thị B</h4>
+                        <p>Product Manager tại Shopee</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Phản hồi nhanh chóng từ nhà tuyển dụng và quy trình ứng tuyển đơn giản giúp tôi tiết kiệm rất nhiều thời gian."</p>
+                <div class="testimonial-author">
+                    <div class="author-img"></div>
+                    <div class="author-info">
+                        <h4>Lê Văn C</h4>
+                        <p>Data Analyst tại VNG</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Bắt đầu tìm kiếm công việc ngay hôm nay</h2>
+        <p>Đăng ký miễn phí và khám phá hàng nghìn cơ hội việc làm phù hợp với kỹ năng của bạn</p>
+        <a href="#" class="btn-cta">Tạo hồ sơ ngay</a>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>JobFIT</h3>
+                <p>Nền tảng tìm kiếm việc làm hàng đầu Việt Nam, kết nối ứng viên với nhà tuyển dụng uy tín.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">in</a>
+                    <a href="#" class="social-icon">t</a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Dành cho ứng viên</h3>
+                <ul>
+                    <li><a href="#">Tìm việc làm</a></li>
+                    <li><a href="#">Tạo hồ sơ</a></li>
+                    <li><a href="#">Việc làm đã lưu</a></li>
+                    <li><a href="#">Công ty đã theo dõi</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Dành cho nhà tuyển dụng</h3>
+                <ul>
+                    <li><a href="#">Đăng tin tuyển dụng</a></li>
+                    <li><a href="#">Tìm kiếm ứng viên</a></li>
+                    <li><a href="#">Giải pháp nhân sự</a></li>
+                    <li><a href="#">Bảng giá dịch vụ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Về chúng tôi</h3>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                    <li><a href="#">Trung tâm trợ giúp</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 JobFIT. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+</body>
+</html>
