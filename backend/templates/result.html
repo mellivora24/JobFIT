@@ -15,7 +15,11 @@
         <main class="result-card">
             <h2>Kết quả phân tích</h2>
             <div class="response-content">
-                <p>{{ response|safe }}</p>
+                <h3>Gợi ý cải thiện CV:</h3>
+                <p>{{ suggestions|safe }}</p>
+            
+                <h3>Điểm phù hợp:</h3>
+                <p>Matching Score: {{ matching_score }}%</p>
             </div>
             <a href="{{ url_for('cv.chat') }}" class="btn btn-primary">Hỏi lại</a>
         </main>

@@ -1,5 +1,5 @@
-from backend.utils.jd_parse import parse_text
-from backend.utils.embedded_vector import embedded_vector
+from utils.jd_parse import parse_text
+from utils.embedded_vector import embedded_vector
 
 def create_jd_embedding(jd_text):
     """

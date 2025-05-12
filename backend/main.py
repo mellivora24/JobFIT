@@ -4,6 +4,10 @@ import os
 from dotenv import load_dotenv
 from utils.logger import setup_logger
 
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Initialize logger
 logger = setup_logger()
 

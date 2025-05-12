@@ -1,15 +1,33 @@
-import openai
+# import openai
 import json
-from backend.config.settings import Settings
-from backend.models.cv_model import CV
-from backend.models.jd_model import JD
-from backend.services.cv_service import create_cv_embedding
-from backend.services.jd_service import create_jd_embedding
-from backend.services.similarity_service import calculate_similarity
+from config.settings import Settings
+from google import genai
+from models.cv_model import CV
+from models.jd_model import JD
+from services.cv_service import create_cv_embedding
+from services.jd_service import create_jd_embedding
+from services.similarity_service import calculate_similarity
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure the OpenAI API key
-openai.api_key = Settings.OPENAI_API_KEY
+# openai.api_key = Settings.OPENAI_API_KEY
 
+def gemini_chat_completion(prompt: str, model_name: str = "gemini-2.0-flash") -> str:
+    """
+    Generates a chat completion using Google's Gemini model.\n
+    :param prompt: The prompt to send to the model.
+    :param model_name: The name of the model to use (default is "gemini-2.0-flash").
+    :return: The response from the model.
+    """
+    client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+    response = client.models.generate_content(
+        model=model_name,
+        contents=prompt,
+    )
+    return response.text
 
 def _create_json_cv(cv: CV):
     """
@@ -84,20 +102,21 @@ def _extract_text_from_jd(jd_json: str):
     return texts
 
 
-def _get_suggestions_from_openai(cv_json, jd_json):
+def _get_suggestions_from_llm(cv_json, jd_json) -> str:
     """
-    Get suggestions for CV improvement based on JD using OpenAI
+    Get suggestions for CV improvement based on JD using LLM\n
+    :param cv_json: CV JSON string
+    :param jd_json: JD JSON string
+    :return: Suggestions for CV improvement
     """
-    response = openai_client.chat.completions.create(
-        model="gpt-4.0",
-        messages=[
-            {
-                "role": "user",
-                "content": f"Hãy đề xuất cải tiến CV dựa vào JD sau, những trường không có nội dung được hiểu là thiếu:\nCV: {cv_json}\nJD: {jd_json}"
-            }
-        ]
-    )
-    return response.choices[0].message.content
+    
+    print("Using Gemini model for suggestions...")
+    
+    prompt = f"Hãy đề xuất cải tiến CV dựa vào JD sau, những trường không có nội dung được hiểu là thiếu:\nCV: {cv_json}\nJD: {jd_json}\n"
+    print(prompt)
+    response = gemini_chat_completion(prompt)
+    print("Response from Gemini model:", response)
+    return response
 
 
 def _get_matching_score(cv_json, jd_json):

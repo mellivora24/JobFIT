@@ -1,10 +1,10 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for
-from backend.services.llm_service import review_cv
-from backend.utils.file_utils import extract_text_from_file
-from backend.models.cv_model import CV
-from backend.models.jd_model import JD
-from backend.config.database import save_qa
-from backend.utils.logger import setup_logger
+from services.llm_service import review_cv
+from utils.file_utils import extract_text_from_file
+from models.cv_model import CV
+from models.jd_model import JD
+from config.database import save_qa
+from utils.logger import setup_logger
 import json
 
 # Initialize logger
@@ -59,7 +59,7 @@ def chat():
                 # In a real implementation, you would parse the CV text to create a proper CV model
                 # This is a simplified example
                 cv_model = CV(
-                    personal_info={"name": "Extracted from CV", "career_objective": cv_text[:200]},
+                    personal_info={"name": "Extracted from CV", "gender": "M/F", "email": "abc@gmail.com", "career_objective": "Career Objective"},
                     education=[],
                     skills=[],
                     work_experience=[]
@@ -73,17 +73,24 @@ def chat():
 
                 # Get review result
                 review_result = review_cv(cv_model, jd_model)
-                response = json.dumps(review_result, indent=2)
+                print(review_result)
+                print(type(review_result))
+                review_result['matching_score'] = float(review_result['matching_score'])
+                
+                suggestions = review_result["suggestions"].replace('\n', '<br>')
+                logger.debug(f"Suggestions: {suggestions}")
+                matching_score = round(float(review_result["matching_score"]), 2)
+                logger.debug(f"match_score: {matching_score}")
 
                 # Save question and response to database
-                try:
-                    save_qa(question, cv_text, jd_text, response)
-                    logger.info("Saved Q&A to MongoDB")
-                except Exception as db_error:
-                    logger.error(f"Failed to save to database: {str(db_error)}")
-                    # Continue without failing the request
+                # try:
+                #     save_qa(question, cv_text, jd_text, response)
+                #     logger.info("Saved Q&A to MongoDB")
+                # except Exception as db_error:
+                #     logger.error(f"Failed to save to database: {str(db_error)}")
+                #     # Continue without failing the request
 
-                return render_template('result.html', response=review_result)
+                return render_template('result.html', suggestions=suggestions, matching_score=matching_score)
 
             except Exception as parsing_error:
                 logger.error(f"Error parsing CV or JD: {str(parsing_error)}")

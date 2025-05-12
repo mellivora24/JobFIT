@@ -1,5 +1,5 @@
 import re
-from backend.models.jd_model import JD, _JobDescription, _JobRequirement
+from models.jd_model import JD, _JobDescription, _JobRequirement
 
 
 def parse_text(text):

@@ -1,6 +1,6 @@
 
-from backend.utils.file_utils import extract_text_from_file
-from backend.utils.embedded_vector import embedded_vector
+from utils.file_utils import extract_text_from_file
+from utils.embedded_vector import embedded_vector
 
 def create_cv_embedding(cv_text):
     """
