@@ -88,7 +88,7 @@ cd JobFIT
   ```
 - **Cài đặt dependencies**:
   ```bash
-  pip install -r backend/requirements.txt
+  pip install -r requirements.txt
   ```
 
 ### 3. Cấu hình
