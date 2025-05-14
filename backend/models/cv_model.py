@@ -33,7 +33,6 @@ class _Certification(BaseModel):
     issuing_organization: Optional[str] = Field(None, description="Tổ chức cấp chứng chỉ")
     certificate_link: Optional[str] = Field(None, description="Liên kết đến chứng chỉ")
 
-
 class _Skill(BaseModel):
     """
     Thông tin kỹ năng của người dùng.
