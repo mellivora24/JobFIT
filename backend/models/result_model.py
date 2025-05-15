@@ -8,7 +8,7 @@ class _Overview(BaseModel):
     description: Optional[str] = Field(None, description="Mô tả tổng quan về kết quả phân tích")
     strengths: Optional[List[str]] = Field(default_factory=list, description="Điểm mạnh của CV")
     weaknesses: Optional[List[str]] = Field(default_factory=list, description="Điểm yếu của CV")
-    match_score: Optional[float] = Field(None, description="Điểm số phù hợp với vị trí ứng tuyển")
+    match_score: Optional[int] = Field(None, description="Điểm số phù hợp với vị trí ứng tuyển")
 
 class _DetailedAnalysis(BaseModel):
     """

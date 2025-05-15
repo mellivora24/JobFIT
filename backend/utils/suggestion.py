@@ -32,8 +32,8 @@ def _chatgpt_suggestion(cv_json, jd_json):
                - Những gợi ý cụ thể để cải thiện CV cho phù hợp hơn với vị trí
                - Các tài nguyên hoặc khóa học có thể giúp ứng viên bổ sung kỹ năng còn thiếu
             
-            CV (JSON): {json.dumps(cv_json, ensure_ascii=False)}
-            JD (JSON): {json.dumps(jd_json, ensure_ascii=False)}
+            CV (JSON): {cv_json}
+            JD (JSON): {jd_json}
             
             Trả về phân tích của bạn dưới dạng JSON với cấu trúc sau:
             {{
@@ -41,7 +41,7 @@ def _chatgpt_suggestion(cv_json, jd_json):
                     "description": "Mô tả tổng quan về kết quả phân tích",
                     "strengths": ["Điểm mạnh 1", "Điểm mạnh 2", ...],
                     "weaknesses": ["Điểm yếu 1", "Điểm yếu 2", ...],
-                    "match_score": số điểm từ 0-100 thể hiện mức độ phù hợp tổng thể
+                    "match_score": số điểm từ 0-100 thể hiện mức độ phù hợp tổng thể (làm tròn đến hàng đơn vị)
                 }},
                 "detailed_analysis": {{
                     "personal_info": "Phân tích thông tin cá nhân và mục tiêu nghề nghiệp",
@@ -90,8 +90,8 @@ def _gemini_suggestion(cv_json, jd_json):
                - Những gợi ý cụ thể để cải thiện CV cho phù hợp hơn với vị trí
                - Các tài nguyên hoặc khóa học có thể giúp ứng viên bổ sung kỹ năng còn thiếu
             
-            CV (JSON): {json.dumps(cv_json, ensure_ascii=False)}
-            JD (JSON): {json.dumps(jd_json, ensure_ascii=False)}
+            CV (JSON): {cv_json}
+            JD (JSON): {jd_json}
             
             Trả về phân tích của bạn dưới dạng JSON với cấu trúc sau:
             {{
@@ -99,7 +99,7 @@ def _gemini_suggestion(cv_json, jd_json):
                     "description": "Mô tả tổng quan về kết quả phân tích",
                     "strengths": ["Điểm mạnh 1", "Điểm mạnh 2", ...],
                     "weaknesses": ["Điểm yếu 1", "Điểm yếu 2", ...],
-                    "match_score": số điểm từ 0-100 thể hiện mức độ phù hợp tổng thể
+                    "match_score": số điểm từ 0-100 thể hiện mức độ phù hợp tổng thể (điểm làm tròn đến hàng đơn vị)
                 }},
                 "detailed_analysis": {{
                     "personal_info": "Phân tích thông tin cá nhân và mục tiêu nghề nghiệp",

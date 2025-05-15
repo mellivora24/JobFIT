@@ -54,7 +54,7 @@ class _PersonalProject(BaseModel):
     """
     name: Optional[str] = Field(None, description="Tên dự án")
     description: Optional[str] = Field(None, description="Mô tả dự án")
-    members: Optional[List[int]] = Field(default_factory=list, description="Sô lượng thành viên tham gia dự án")
+    members: Optional[int] = Field(None, description="Sô lượng thành viên tham gia dự án")
     technologies: Optional[List[str]]= Field(default_factory=list, description="Công nghệ sử dụng trong dự án")
     github_link: Optional[str] = Field(None, description="Liên kết đến GitHub hoặc trang dự án")
 
