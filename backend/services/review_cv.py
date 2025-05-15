@@ -112,7 +112,7 @@ class ReviewCV:
 
         return embeddings
 
-    def _calculate_section_similarities(self) -> Dict[str, float]:
+    def _calculate_section_similarities(self) -> int:
         """
         Tính toán mức độ tương đồng giữa các phần của CV và JD
 
@@ -147,7 +147,7 @@ class ReviewCV:
             jd_combined = np.mean([emb for emb in jd_embeddings.values()], axis=0)
             similarities['overall'] = calculate_similarity([cv_combined], [jd_combined])
 
-        return similarities
+        return int(similarities['overall']) if 'overall' in similarities else 0
 
     def _analyze_cv(self) -> ResultModel:
         """
@@ -160,8 +160,8 @@ class ReviewCV:
             similarities = self._calculate_section_similarities()
 
             # Chuyển đổi CV và JD thành chuỗi JSON để gửi đến Gemini
-            cv_json = self.cv.model_dump(exclude_none=True)
-            jd_json = self.jd.model_dump(exclude_none=True)
+            cv_json = self.cv
+            jd_json = self.jd
 
             analysis_json_str = get_suggestion(cv_json, jd_json, model='Gemini')
 
@@ -180,12 +180,11 @@ class ReviewCV:
 
                 # Cập nhật điểm tương đồng từ embedding similarity
                 if result.overview:
-                    result.overview.match_score = similarities.get('overall', 0)
+                    result.overview.match_score = similarities
 
                 return result
             except json.JSONDecodeError as e:
                 print(f"Lỗi khi phân tích JSON từ phản hồi: {e}")
-                # Trả về đối tượng ResultModel mặc định
                 return self._create_default_result()
 
         except Exception as e:
@@ -213,14 +212,16 @@ class ReviewCV:
             )
         )
 
-    def get_result(self) -> ResultModel:
+    def get_result(self) -> dict:
         """
-        Lấy kết quả phân tích
+        Lấy kết quả phân tích dưới dạng JSON
 
         Returns:
-            ResultModel: Đối tượng chứa kết quả phân tích
+            dict: Dictionary chứa kết quả phân tích có thể serialize thành JSON
         """
-        return self.result
+        if self.result:
+            return self.result.model_dump(exclude_none=True)
+        return {}
 
     def get_overview(self):
         """

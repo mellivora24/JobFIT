@@ -78,7 +78,7 @@ class CreateCV:
                 Lưu ý:
                 1. Chỉ trả về chuỗi JSON, không có văn bản giải thích thêm.
                 2. Hãy đảm bảo JSON được trả về đúng định dạng và đúng cấu trúc như mẫu trên.
-                3. Nếu thiếu thông tin nào đó không có trong văn bản, hãy để trường đó là null hoặc bỏ qua nó.
+                3. Nếu thiếu thông tin nào đó không có trong văn bản, hãy ghi là không có thông tin (với gpa, members, time thì ghi là None).
                 4. Không bọc JSON trong dấu backtick hoặc markdown code block.
             """
 

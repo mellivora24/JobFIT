@@ -44,7 +44,7 @@ class CreateJD:
                 Lưu ý:
                 1. Chỉ trả về chuỗi JSON, không có văn bản giải thích thêm.
                 2. Hãy đảm bảo JSON được trả về đúng định dạng và đúng cấu trúc như mẫu trên.
-                3. Nếu thiếu thông tin nào đó không có trong văn bản, hãy để trường đó là null hoặc bỏ qua nó.
+                3. Nếu thiếu thông tin nào đó không có trong văn bản, hãy ghi là không có thông tin.
                 4. Không bọc JSON trong dấu backtick hoặc markdown code block.
             """
 
@@ -82,6 +82,10 @@ class CreateJD:
         except Exception as e:
             print(f"Lỗi khi phân tích hoặc tạo JD: {e}")
             return None
+
+    def get_jd(self) -> JD:
+        """Trả về đối tượng JD"""
+        return self.jd
 
     def get_job_description(self):
         """Trả về phần mô tả công việc"""
