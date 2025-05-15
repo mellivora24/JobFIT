@@ -4,7 +4,6 @@ from backend.models.cv_model import CV
 import backend.api.gemini as gemini_services
 from backend.utils.convert import extract_text_from_file
 
-
 class CreateCV:
     def __init__(self, cv_file):
         """
@@ -215,3 +214,5 @@ class CreateCV:
             # Sử dụng model_dump thay vì dict do Pydantic v2 đã không còn hỗ trợ dict
             return self.cv.model_dump(exclude_none=True)
         return {}
+
+# Đã kiểm thử

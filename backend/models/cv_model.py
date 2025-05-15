@@ -63,8 +63,8 @@ class CV(BaseModel):
     Mô hình dữ liệu cho CV (Curriculum Vitae) của người dùng.
     """
     personal_info: Optional[_PersonalInfo] = Field(None, description="Thông tin cá nhân")
-    career_objective: Optional[str] = Field(None, description="Mục tiêu nghề nghiệp")
     education: Optional[List[_Education]] = Field(default_factory=list, description="Học vấn")
     certifications: Optional[List[_Certification]] = Field(default_factory=list, description="Chứng chỉ")
+    personal_projects: Optional[List[_PersonalProject]] = Field(default_factory=list, description="Dự án cá nhân")
     skills: Optional[List[str]] = Field(default_factory=list, description="Kỹ năng")
     work_experience: Optional[List[_WorkExperience]]= Field(default_factory=list, description="Kinh nghiệm làm việc")
