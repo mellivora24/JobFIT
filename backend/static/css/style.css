@@ -1,15 +1,166 @@
-body {
-    font-family: Arial, sans-serif;
+/* Reset mặc định */
+* {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container chính */
 .container {
     max-width: 800px;
-    margin: auto;
+    margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
-h2 {
-    color: #333;
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #1a73e8;
+    font-weight: 600;
+}
+
+/* Card chung (cho result, form, error) */
+.result-card,
+.form-card,
+.error-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.result-card h2,
+.form-card h2,
+.error-card h2 {
+    font-size: 1.8rem;
+    color: #1a73e8;
+    margin-bottom: 20px;
+}
+
+/* Form */
+.chat-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.form-group input[type="file"],
+.form-group input[type="text"],
+.form-group textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"]:focus,
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #1a73e8;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Nút */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #1a73e8;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1557b0;
+    transform: translateY(-2px);
+}
+
+/* Nội dung kết quả */
+.response-content {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.response-content p {
+    font-size: 1.1rem;
+}
+
+/* Thông báo lỗi */
+.error-message {
+    color: #d32f2f;
+    font-size: 1.1rem;
+    background: #ffebee;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .result-card,
+    .form-card,
+    .error-card {
+        padding: 20px;
+    }
+
+    .result-card h2,
+    .form-card h2,
+    .error-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+    }
 }

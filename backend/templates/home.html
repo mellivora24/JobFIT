@@ -1,1 +1,728 @@
- 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobFIT - Phân tích CV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af',
+                        dark: '#111827',
+                        light: '#f9fafb'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-in': 'slideIn 0.3s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .animate-loading {
+            animation: loading 2s infinite;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 font-sans text-dark">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="hidden lg:block w-64 bg-white shadow-lg">
+            <div class="h-full flex flex-col">
+                <div class="p-6 border-b">
+                    <div class="text-2xl font-bold text-primary">JobFIT<span class="text-secondary">.</span></div>
+                </div>
+                <nav class="flex-1 p-6 space-y-8">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Chức năng</p>
+                        <ul class="space-y-2">
+                            <li class="group">
+                                <a href="#" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-chart-bar w-5 h-5 mr-3"></i>
+                                    <span>Phân tích CV</span>
+                                </a>
+                            </li>
+                            <li class="group">
+                                <a href="#" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-history w-5 h-5 mr-3"></i>
+                                    <span>Lịch sử phân tích</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Tài khoản</p>
+                        <ul class="space-y-2">
+                            <li class="group">
+                                <a href="#" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-user w-5 h-5 mr-3"></i>
+                                    <span>Hồ sơ</span>
+                                </a>
+                            </li>
+                            <li class="group">
+                                <a href="/auth" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
+                                    <span>Đăng xuất</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="p-6 text-xs text-gray-500 border-t">
+                    © 2025 JobFIT. All rights reserved.
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile menu button -->
+        <div class="lg:hidden fixed top-4 left-4 z-50">
+            <button id="menuBtn" class="text-primary p-2 rounded-lg bg-white shadow-md">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile sidebar -->
+        <div id="mobileSidebar" class="hidden fixed inset-0 z-40">
+            <div class="absolute inset-0 bg-dark bg-opacity-50" id="overlay"></div>
+            <div class="absolute top-0 left-0 w-64 h-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out -translate-x-full">
+                <div class="p-6 border-b flex justify-between items-center">
+                    <div class="text-2xl font-bold text-primary">JobFIT<span class="text-secondary">.</span></div>
+                    <button id="closeMenu" class="text-gray-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <nav class="p-6 space-y-8">
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Chức năng</p>
+                        <ul class="space-y-2">
+                            <li class="group">
+                                <a href="#" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-chart-bar w-5 h-5 mr-3"></i>
+                                    <span>Phân tích CV</span>
+                                </a>
+                            </li>
+                            <li class="group">
+                                <a href="#" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-history w-5 h-5 mr-3"></i>
+                                    <span>Lịch sử phân tích</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Tài khoản</p>
+                        <ul class="space-y-2">
+                            <li class="group">
+                                <a href="#" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-user w-5 h-5 mr-3"></i>
+                                    <span>Hồ sơ</span>
+                                </a>
+                            </li>
+                            <li class="group">
+                                <a href="/auth" class="flex items-center text-gray-700 group-hover:text-primary">
+                                    <i class="fas fa-sign-out-alt w-5 h-5 mr-3"></i>
+                                    <span>Đăng xuất</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 lg:p-10">
+            <div class="max-w-5xl mx-auto">
+                <header class="mb-12">
+                    <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">CV Analysis</h1>
+                    <p class="text-gray-600">Tìm hiểu sự phù hợp giữa CV của bạn và vị trí mong muốn</p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- CV Upload -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 w-32 h-32 -mt-10 -mr-10 bg-blue-100 rounded-full opacity-40"></div>
+                        <div class="relative">
+                            <div class="flex items-center space-x-2 mb-4">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-primary">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <h2 class="text-xl font-semibold">Upload CV</h2>
+                            </div>
+                            <div id="cvUploadForm">
+                                <div class="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer" id="dropArea">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-4"></i>
+                                    <p class="text-gray-500 mb-4">Kéo thả CV hoặc nhấn để chọn file</p>
+                                    <input type="file" id="cvFile" name="cv" accept=".pdf,.docx,.png,.jpg,.jpeg" class="hidden">
+                                    <button type="button" id="fileSelectBtn" class="inline-flex items-center px-4 py-2 bg-blue-50 text-primary rounded-md hover:bg-blue-100">
+                                        <i class="fas fa-file-upload mr-2"></i> Chọn file
+                                    </button>
+                                    <p id="selectedFileName" class="text-sm text-gray-500 mt-4"></p>
+                                    <p class="text-xs text-gray-400 mt-6">Hỗ trợ định dạng PDF, DOCX, PNG, JPG, JPEG</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JD Input -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 w-32 h-32 -mt-10 -mr-10 bg-indigo-100 rounded-full opacity-40"></div>
+                        <div class="relative">
+                            <div class="flex items-center space-x-2 mb-4">
+                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <h2 class="text-xl font-semibold">Mô tả công việc</h2>
+                            </div>
+                            <div id="jdInputForm">
+                                <div class="mb-4">
+                                    <textarea id="jdText" name="jd" rows="7"
+                                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none transition-all"
+                                            placeholder="Nhập mô tả công việc (JD) tại đây..."></textarea>
+                                </div>
+                                <p class="text-xs text-gray-400">Vui lòng nhập chi tiết yêu cầu công việc để có kết quả chính xác nhất (tối thiểu 50 ký tự)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mb-10">
+                    <button id="analyzeBtn" class="flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-8 py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-1 transition-all disabled:opacity-50 disabled:pointer-events-none">
+                        <i class="fas fa-bolt mr-2"></i>
+                        <span>Phân tích ngay</span>
+                    </button>
+                </div>
+
+                <!-- Loading Section -->
+                <div id="loadingSection" class="hidden">
+                    <div class="bg-white rounded-xl shadow-md p-8 text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1">
+                            <div class="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 animate-loading"></div>
+                        </div>
+                        <div class="mb-6">
+                            <div class="inline-block rounded-full p-4 bg-blue-50">
+                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                            </div>
+                        </div>
+                        <h2 class="text-xl font-semibold mb-2">AI đang phân tích CV của bạn</h2>
+                        <p class="text-gray-500">Chúng tôi đang sử dụng AI để phân tích chi tiết CV và so sánh với JD</p>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="resultsSection" class="hidden">
+                    <!-- Score Overview -->
+                    <div class="bg-white rounded-xl shadow-md p-8 mb-8 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-50 to-transparent rounded-full -mr-32 -mt-32"></div>
+                        <div class="relative flex flex-col md:flex-row md:items-center">
+                            <div class="flex-shrink-0 mr-8 mb-6 md:mb-0">
+                                <div class="relative">
+                                    <svg class="w-32 h-32" viewBox="0 0 36 36">
+                                        <circle cx="18" cy="18" r="16" fill="none" stroke="#e5e7eb" stroke-width="2"></circle>
+                                        <circle id="scoreCircle" cx="18" cy="18" r="16" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 18 18)"></circle>
+                                        <text id="scoreText" x="18" y="18" font-family="Inter" font-size="0.6rem" font-weight="bold" text-anchor="middle" alignment-baseline="middle" fill="#111827">85%</text>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-3">Kết quả phân tích</h2>
+                                <p id="overviewDescription" class="text-gray-600 mb-6">CV của bạn phù hợp với vị trí ứng tuyển. Tuy nhiên, vẫn có một số điểm cần cải thiện để tăng khả năng được gọi phỏng vấn.</p>
+
+                                <div class="flex flex-wrap gap-4">
+                                    <div class="px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm flex items-center">
+                                        <i class="fas fa-check-circle mr-2"></i> Kinh nghiệm phù hợp
+                                    </div>
+                                    <div class="px-4 py-2 bg-red-50 text-red-700 rounded-full text-sm flex items-center">
+                                        <i class="fas fa-exclamation-circle mr-2"></i> Thiếu một số kỹ năng
+                                    </div>
+                                    <div class="px-4 py-2 bg-yellow-50 text-yellow-700 rounded-full text-sm flex items-center">
+                                        <i class="fas fa-star mr-2"></i> Trình bày tốt
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strengths & Weaknesses -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 mr-4">
+                                    <i class="fas fa-thumbs-up"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold">Điểm mạnh</h3>
+                            </div>
+                            <ul id="strengthsList" class="space-y-2"></ul>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-red-500">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 mr-4">
+                                    <i class="fas fa-thumbs-down"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold">Điểm yếu</h3>
+                            </div>
+                            <ul id="weaknessesList" class="space-y-2"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Analysis -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                        <div class="bg-gray-50 px-6 py-4 border-b">
+                            <h2 class="text-lg font-semibold">Phân tích chi tiết</h2>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-8">
+                                <div>
+                                    <div class="flex items-center mb-4">
+                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-3">
+                                            <i class="fas fa-graduation-cap"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold">Học vấn</h3>
+                                    </div>
+                                    <p id="educationAnalysis" class="text-gray-700 pl-11"></p>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center mb-4">
+                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 mr-3">
+                                            <i class="fas fa-tools"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold">Kỹ năng</h3>
+                                    </div>
+                                    <p id="skillsAnalysis" class="text-gray-700 pl-11 mb-4"></p>
+
+                                    <div class="pl-11 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="bg-green-50 p-4 rounded-lg">
+                                            <h4 class="font-semibold text-green-700 mb-2 flex items-center">
+                                                <i class="fas fa-check-circle mr-2"></i> Kỹ năng phù hợp
+                                            </h4>
+                                            <ul id="skillsMatched" class="text-gray-700 space-y-1"></ul>
+                                        </div>
+                                        <div class="bg-red-50 p-4 rounded-lg">
+                                            <h4 class="font-semibold text-red-700 mb-2 flex items-center">
+                                                <i class="fas fa-times-circle mr-2"></i> Kỹ năng còn thiếu
+                                            </h4>
+                                            <ul id="skillsMissing" class="text-gray-700 space-y-1"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center mb-4">
+                                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 mr-3">
+                                            <i class="fas fa-briefcase"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold">Kinh nghiệm làm việc</h3>
+                                    </div>
+                                    <p id="workExperienceAnalysis" class="text-gray-700 pl-11"></p>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center mb-4">
+                                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600 mr-3">
+                                            <i class="fas fa-code-branch"></i>
+                                        </div>
+                                        <h3 class="text-lg font-semibold">Dự án cá nhân</h3>
+                                    </div>
+                                    <p id="personalProjectsAnalysis" class="text-gray-700 pl-11"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                        <div class="bg-indigo-50 px-6 py-4 border-b">
+                            <h2 class="text-lg font-semibold text-indigo-700">Đề xuất cải thiện</h2>
+                        </div>
+                        <div class="p-6">
+                            <ul id="suggestionsList" class="mb-8 space-y-3"></ul>
+
+                            <h3 class="font-semibold text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-link mr-2 text-indigo-500"></i> Tài nguyên hữu ích
+                            </h3>
+                            <ul id="resourcesList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-4">
+                        <button id="downloadReport" class="flex items-center justify-center bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                            <i class="fas fa-download mr-2"></i> Tải xuống báo cáo
+                        </button>
+                        <button id="shareReport" class="flex items-center justify-center bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                            <i class="fas fa-share-alt mr-2"></i> Chia sẻ
+                        </button>
+                        <button id="newAnalysis" class="flex items-center justify-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-redo-alt mr-2"></i> Phân tích CV khác
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            document.getElementById('mobileSidebar').classList.remove('hidden');
+            document.querySelector('#mobileSidebar > div:last-child').classList.add('translate-x-0');
+            document.querySelector('#mobileSidebar > div:last-child').classList.remove('-translate-x-full');
+        });
+
+        document.getElementById('closeMenu').addEventListener('click', closeMobileMenu);
+        document.getElementById('overlay').addEventListener('click', closeMobileMenu);
+
+        function closeMobileMenu() {
+            document.querySelector('#mobileSidebar > div:last-child').classList.remove('translate-x-0');
+            document.querySelector('#mobileSidebar > div:last-child').classList.add('-translate-x-full');
+            setTimeout(() => {
+                document.getElementById('mobileSidebar').classList.add('hidden');
+            }, 300);
+        }
+
+        // File selection display and validation
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('cvFile');
+        const fileSelectBtn = document.getElementById('fileSelectBtn');
+        const selectedFileName = document.getElementById('selectedFileName');
+
+        // File select button click handler
+        fileSelectBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Click anywhere in drop area to select file
+        dropArea.addEventListener('click', (e) => {
+            if (e.target !== fileSelectBtn && e.target.parentElement !== fileSelectBtn) {
+                fileInput.click();
+            }
+        });
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        dropArea.addEventListener('dragenter', () => {
+            dropArea.classList.add('border-primary');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('border-primary');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            dropArea.classList.remove('border-primary');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                fileInput.files = files;
+                updateFileName(files[0].name);
+            }
+        });
+
+        // Show file name when selected
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                updateFileName(fileInput.files[0].name);
+            }
+        });
+
+        function updateFileName(name) {
+            selectedFileName.textContent = name;
+            selectedFileName.classList.add('text-primary', 'font-medium');
+            dropArea.classList.add('border-primary', 'bg-blue-50');
+            validateForm();
+        }
+
+        // JD input validation
+        const jdText = document.getElementById('jdText');
+        jdText.addEventListener('input', validateForm);
+
+        // Validate form to enable/disable analyze button
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        function validateForm() {
+            const hasFile = fileInput.files.length > 0;
+            const hasJD = jdText.value.trim().length >= 50;
+
+            if (hasFile && hasJD) {
+                analyzeBtn.disabled = false;
+            } else {
+                analyzeBtn.disabled = true;
+            }
+        }
+
+        // Initialize form validation
+        validateForm();
+
+        // Analysis process
+        analyzeBtn.addEventListener('click', startAnalysis);
+
+        function startAnalysis() {
+            // Show loading section, hide upload section
+            document.getElementById('cvUploadForm').parentElement.parentElement.classList.add('hidden');
+            document.getElementById('jdInputForm').parentElement.parentElement.classList.add('hidden');
+            analyzeBtn.parentElement.classList.add('hidden');
+            document.getElementById('loadingSection').classList.remove('hidden');
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('cv', fileInput.files[0]);
+            formData.append('jd', jdText.value);
+
+            // Call API to analyze CV
+            fetchAnalysisData(formData);
+        }
+
+        function fetchAnalysisData(formData) {
+            setTimeout(() => {
+                fetch('/cv_review', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('loadingSection').classList.add('hidden');
+                    displayResults(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // For demonstration, use mock data if API fails
+                    document.getElementById('loadingSection').classList.add('hidden');
+                    displayResults()
+                });
+            }, 3000);
+        }
+
+        function displayResults(data) {
+    document.getElementById('resultsSection').classList.remove('hidden');
+
+    // Update score and overview
+    const scoreCircle = document.getElementById('scoreCircle');
+    const scoreText = document.getElementById('scoreText');
+    const score = data.match_score || data.overview.match_score || 0;
+
+    // Set the circle progress
+    const circumference = 2 * Math.PI * 16;
+    const offset = circumference - (score / 100) * circumference;
+    scoreCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+    scoreCircle.style.strokeDashoffset = offset;
+
+    // Set score text
+    scoreText.textContent = `${score}%`;
+
+    // Set overview description
+    document.getElementById('overviewDescription').textContent =
+        data.overview.description || data.overview;
+
+    // Helper function to create list items
+    const createListItem = (text, icon, color) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start';
+        li.innerHTML = `
+            <i class="fas fa-${icon} text-${color}-500 mt-1 mr-2"></i>
+            <span>${text}</span>
+        `;
+        return li;
+    };
+
+    // Display strengths
+    const strengthsList = document.getElementById('strengthsList');
+    strengthsList.innerHTML = '';
+    const strengths = data.strengths || data.overview.strengths || [];
+    strengths.forEach(strength => {
+        strengthsList.appendChild(createListItem(strength, 'check', 'green'));
+    });
+
+    // Display weaknesses
+    const weaknessesList = document.getElementById('weaknessesList');
+    weaknessesList.innerHTML = '';
+    const weaknesses = data.weaknesses || data.overview.weaknesses || [];
+    weaknesses.forEach(weakness => {
+        weaknessesList.appendChild(createListItem(weakness, 'times', 'red'));
+    });
+
+    // Set detailed analysis texts
+    const analysisData = data.detailed_analysis || data;
+    document.getElementById('educationAnalysis').textContent =
+        analysisData.education || '';
+    document.getElementById('skillsAnalysis').textContent =
+        (analysisData.skills && analysisData.skills.analysis) || analysisData.skills || '';
+    document.getElementById('workExperienceAnalysis').textContent =
+        analysisData.work_experience || analysisData.workExperience || '';
+    document.getElementById('personalProjectsAnalysis').textContent =
+        analysisData.personal_projects || analysisData.personalProjects || '';
+
+    // Helper function to get resource icon based on type
+    const getResourceIcon = (type) => {
+        const iconMap = {
+            'course': 'fa-graduation-cap',
+            'article': 'fa-file-alt',
+            'tool': 'fa-tools',
+            'website': 'fa-globe',
+            'book': 'fa-book',
+            'video': 'fa-video',
+            'default': 'fa-link'
+        };
+        return iconMap[type] || iconMap.default;
+    };
+
+    // Display matched skills
+    const skillsMatched = document.getElementById('skillsMatched');
+    skillsMatched.innerHTML = '';
+    const matchedSkills =
+        (analysisData.skills && analysisData.skills.matched) || [];
+    matchedSkills.forEach(skill => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start';
+        li.innerHTML = `
+            <i class="fas fa-check-circle text-green-600 mt-1 mr-2"></i>
+            <span>${skill}</span>
+        `;
+        skillsMatched.appendChild(li);
+    });
+
+    // Display missing skills
+    const skillsMissing = document.getElementById('skillsMissing');
+    skillsMissing.innerHTML = '';
+    const missingSkills =
+        (analysisData.skills && analysisData.skills.missing) || [];
+    missingSkills.forEach(skill => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start';
+        li.innerHTML = `
+            <i class="fas fa-times-circle text-red-600 mt-1 mr-2"></i>
+            <span>${skill}</span>
+        `;
+        skillsMissing.appendChild(li);
+    });
+
+    // Display suggestions
+    const suggestionsList = document.getElementById('suggestionsList');
+    suggestionsList.innerHTML = '';
+    const suggestions =
+        data.suggestions || (data.recommendations && data.recommendations.suggestions) || [];
+    suggestions.forEach((suggestion, index) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start p-3 bg-indigo-50 rounded-lg mb-2';
+        li.innerHTML = `
+            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3 flex-shrink-0">
+                <span class="font-semibold">${index + 1}</span>
+            </div>
+            <span>${suggestion}</span>
+        `;
+        suggestionsList.appendChild(li);
+    });
+
+    // Display resources
+    const resourcesList = document.getElementById('resourcesList');
+    resourcesList.innerHTML = '';
+    const resources =
+        data.resources || (data.recommendations && data.recommendations.resources) || [];
+    resources.forEach(resource => {
+        // Handle both object resources and string resources
+        const resourceObj = typeof resource === 'string'
+            ? { title: resource, description: '', url: '#', type: 'default' }
+            : resource;
+
+        const li = document.createElement('li');
+        li.className = 'bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors mb-2';
+        li.innerHTML = `
+            <a href="${resourceObj.url || '#'}" target="_blank" class="flex items-start">
+                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-3 flex-shrink-0">
+                    <i class="fas ${getResourceIcon(resourceObj.type)}"></i>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-1">${resourceObj.title}</h4>
+                    <p class="text-sm text-gray-600">${resourceObj.description || ''}</p>
+                </div>
+            </a>
+        `;
+        resourcesList.appendChild(li);
+    });
+
+    // Setup event listeners (using once: true to prevent multiple bindings)
+    document.getElementById('downloadReport').addEventListener('click', () => {
+        generatePDF(data);
+    }, { once: true });
+
+    document.getElementById('shareReport').addEventListener('click', () => {
+        shareReport(data);
+    }, { once: true });
+
+    document.getElementById('newAnalysis').addEventListener('click', resetForm, { once: true });
+}
+
+        // Function to generate and download PDF report
+        function generatePDF(data) {
+            // In a real application, this would generate a PDF and download it
+            alert('Tính năng tải báo cáo PDF đang được phát triển!');
+        }
+
+        // Function to share report
+        function shareReport(data) {
+            // In a real application, this would show share options
+            alert('Tính năng chia sẻ báo cáo đang được phát triển!');
+        }
+
+        // Function to reset form for new analysis
+        function resetForm() {
+            // Reset file input
+            fileInput.value = '';
+            selectedFileName.textContent = '';
+            selectedFileName.classList.remove('text-primary', 'font-medium');
+            dropArea.classList.remove('border-primary', 'bg-blue-50');
+
+            // Reset JD input
+            jdText.value = '';
+
+            // Reset analyze button
+            validateForm();
+
+            // Hide results and show form
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('cvUploadForm').parentElement.parentElement.classList.remove('hidden');
+            document.getElementById('jdInputForm').parentElement.parentElement.classList.remove('hidden');
+            analyzeBtn.parentElement.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
