@@ -1,8 +1,8 @@
 import json
 from typing import Optional
-from backend.models.cv_model import CV
-import backend.api.gemini as gemini_services
-from backend.utils.convert import extract_text_from_file
+from models.cv_model import CV
+import api.gemini as gemini_services
+from utils.convert import extract_text_from_file
 
 class CreateCV:
     def __init__(self, cv_file):

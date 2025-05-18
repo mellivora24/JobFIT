@@ -1,6 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
-from backend.routers.app_routers import init_routes
+from routers.app_routers import init_routes
 
 load_dotenv()
 

@@ -1,7 +1,7 @@
 import json
 from typing import Optional
-from backend.models.jd_model import JD
-import backend.api.gemini as gemini_services
+from models.jd_model import JD
+import api.gemini as gemini_services
 
 
 class CreateJD:

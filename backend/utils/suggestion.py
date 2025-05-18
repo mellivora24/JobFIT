@@ -1,5 +1,5 @@
 import json
-from backend.api import chatgpt, gemini
+from api import chatgpt, gemini
 
 
 def get_suggestion(cv_json, jd_json, model='ChatGPT'):

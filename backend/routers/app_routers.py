@@ -1,6 +1,6 @@
-from backend.services.load_cv import CreateCV
-from backend.services.load_jd import CreateJD
-from backend.services.review_cv import ReviewCV
+from services.load_cv import CreateCV
+from services.load_jd import CreateJD
+from services.review_cv import ReviewCV
 import json
 import numpy as np
 from flask import render_template, request, jsonify

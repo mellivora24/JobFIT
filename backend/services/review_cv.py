@@ -1,12 +1,12 @@
 import json
 import numpy as np
 from typing import Dict, List
-from backend.models.cv_model import CV
-from backend.models.jd_model import JD
-from backend.utils.embedding import embedded_vector
-from backend.utils.suggestion import get_suggestion
-from backend.utils.similarity import calculate_similarity
-from backend.models.result_model import ResultModel, _Overview, _DetailedAnalysis, _Recommendations
+from models.cv_model import CV
+from models.jd_model import JD
+from utils.embedding import embedded_vector
+from utils.suggestion import get_suggestion
+from utils.similarity import calculate_similarity
+from models.result_model import ResultModel, _Overview, _DetailedAnalysis, _Recommendations
 
 class ReviewCV:
     def __init__(self, cv: CV, jd: JD):
