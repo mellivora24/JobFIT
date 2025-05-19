@@ -33,24 +33,52 @@ JobFIT được thiết kế để dễ mở rộng, bảo trì, và là nền t
 ```
 JobFIT/
 ├── backend/                    # Backend Flask
-│   ├── api/                    # API routes (cv_routes.py, jd_routes.py, ...)
-│   ├── services/               # Logic nghiệp vụ (cv_service.py, llm_service.py, ...)
-│   ├── utils/                  # Hàm tiện ích (file_utils.py, error_handler.py, ...)
-│   ├── models/                 # Schema dữ liệu (cv_model.py, jd_model.py)
-│   ├── config/                 # Cấu hình (settings.py, database.py)
-│   ├── templates/              # HTML templates (home.html, upload_cv.html, ...)
-│   ├── static/                 # Tài nguyên tĩnh (css/style.css, js/main.js, ...)
-│   ├── tests/                  # Unit tests
-│   ├── main.py                 # Entry point
-│   └── requirements.txt        # Thư viện Python
-├── scripts/                    # Script triển khai (deploy.sh, setup.sh, ...)
-├── docs/                       # Tài liệu (api.md, setup.md)
-├── .github/workflows/          # CI/CD pipelines
-├── .env.example                # Template file môi trường
-├── Dockerfile                  # Cấu hình Docker
-├── docker-compose.yml          # Cấu hình Docker Compose
-├── README.md                   # Tài liệu này
-└── .gitignore                  # File bỏ qua
+    │   main.py
+    ├───api
+    │   │   chatgpt.py
+    │   │   gemini.py
+    │   │   other.py
+    ├───config
+    │   │   database.py
+    │   │   __init__.py
+    ├───logs
+    │       app_log.py
+    ├───models
+    │   │   cv_model.py
+    │   │   jd_model.py
+    │   │   result_model.py
+    │   │   __init__.py
+    ├───plugins
+    │       __init__.py
+    ├───routers
+    │   │   app_routers.py
+    │   │   __init__.py
+    ├───services
+    │   │   load_cv.py
+    │   │   load_jd.py
+    │   │   review_cv.py
+    │   │   __init__.py
+    ├───static
+    │   ├───css
+    │   │       style.css
+    │   │
+    │   ├───images
+    │   │       logo.png
+    │   │
+    │   └───js
+    │           main.js
+    │
+    ├───templates
+    │       auth.html
+    │       home.html
+    │       landing.html
+    │
+    └───utils
+        │   convert.py
+        │   embedding.py
+        │   similarity.py
+        │   suggestion.py
+        │   __init__.py
 ```
 
 ---
@@ -88,7 +116,7 @@ cd JobFIT
   ```
 - **Cài đặt dependencies**:
   ```bash
-  pip install -r backend/requirements.txt
+  pip install -r requirements.txt
   ```
 
 ### 3. Cấu hình
