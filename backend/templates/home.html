@@ -164,8 +164,8 @@
         <main class="flex-1 p-6 lg:p-10">
             <div class="max-w-5xl mx-auto">
                 <header class="mb-12">
-                    <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">CV Analysis</h1>
-                    <p class="text-gray-600">Tìm hiểu sự phù hợp giữa CV của bạn và vị trí mong muốn</p>
+                    <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-2">JobFIT - Analytics</h1>
+                    <p class="text-gray-600">Để tương lai tốt hơn!</p>
                 </header>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -320,6 +320,18 @@
                                         <h3 class="text-lg font-semibold">Kỹ năng</h3>
                                     </div>
                                     <p id="skillsAnalysis" class="text-gray-700 pl-11 mb-4"></p>
+
+                                    <div class="pl-11 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="bg-green-50 p-4 rounded-lg">
+<!--                                            <h4 class="font-semibold text-green-700 mb-2 flex items-center"></h4>-->
+                                            <ul id="skillsMatched" class="text-gray-700 space-y-1"></ul>
+                                        </div>
+                                        <div class="bg-geen-50 p-4 rounded-lg">
+<!--                                            <h4 class="font-semibold text-red-700 mb-2 flex items-center"></h4>-->
+                                            <ul id="skillsMissing" class="text-gray-700 space-y-1"></ul>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div>
@@ -349,13 +361,12 @@
                     <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
                         <div class="bg-indigo-50 px-6 py-4 border-b">
                             <h2 class="text-lg font-semibold text-indigo-700">Đề xuất cải thiện</h2>
+                            <ul id="suggestionsList" class="mb-8 space-y-3"></ul>
                         </div>
                         <div class="p-6">
-                            <ul id="suggestionsList" class="mb-8 space-y-3"></ul>
-
-                            <h3 class="font-semibold text-gray-700 mb-4 flex items-center">
+                            <h2 class="font-semibold text-gray-700 mb-4 flex items-center">
                                 <i class="fas fa-link mr-2 text-indigo-500"></i> Tài nguyên hữu ích
-                            </h3>
+                            </h2>
                             <ul id="resourcesList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></ul>
                         </div>
                     </div>
@@ -368,7 +379,7 @@
                         <button id="shareReport" class="flex items-center justify-center bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
                             <i class="fas fa-share-alt mr-2"></i> Chia sẻ
                         </button>
-                        <button id="newAnalysis" class="flex items-center justify-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <button id="newAnalysis" class="flex items-center justify-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors" onclick="resetForm()">
                             <i class="fas fa-redo-alt mr-2"></i> Phân tích CV khác
                         </button>
                     </div>
@@ -640,8 +651,7 @@
     // Display resources
     const resourcesList = document.getElementById('resourcesList');
     resourcesList.innerHTML = '';
-    const resources =
-        data.resources || (data.recommendations && data.recommendations.resources) || [];
+    const resources = data.recommendations['resources'];
     resources.forEach(resource => {
         // Handle both object resources and string resources
         const resourceObj = typeof resource === 'string'
@@ -690,23 +700,8 @@
 
         // Function to reset form for new analysis
         function resetForm() {
-            // Reset file input
-            fileInput.value = '';
-            selectedFileName.textContent = '';
-            selectedFileName.classList.remove('text-primary', 'font-medium');
-            dropArea.classList.remove('border-primary', 'bg-blue-50');
-
-            // Reset JD input
-            jdText.value = '';
-
-            // Reset analyze button
-            validateForm();
-
-            // Hide results and show form
-            document.getElementById('resultsSection').classList.add('hidden');
-            document.getElementById('cvUploadForm').parentElement.parentElement.classList.remove('hidden');
-            document.getElementById('jdInputForm').parentElement.parentElement.classList.remove('hidden');
-            analyzeBtn.parentElement.classList.remove('hidden');
+            // Reload the page to reset the form
+            location.reload();
         }
     </script>
 </body>
